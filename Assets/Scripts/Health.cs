@@ -8,6 +8,9 @@ public class Health : MonoBehaviour
     private int maxHearths;
     private Sprite[] sprites = new Sprite[3];
 
+    private bool isDodgeTime = false;
+    private float dodgeTime = 0.3f;
+
     [SerializeField]
     private SpriteRenderer[] hearts = new SpriteRenderer[5];
 
@@ -40,10 +43,21 @@ public class Health : MonoBehaviour
 
     public void OnDamage(int damageAmount)
     {
-        health -= damageAmount;
-        DrawSprites();
-        if (health <= 0)
-            Death();
+        if (!isDodgeTime)
+        {
+            StartCoroutine(DodgeTime());
+            health -= damageAmount;
+            DrawSprites();
+            if (health <= 0)
+                Death();
+        }
+    }
+
+    private IEnumerator DodgeTime()
+    {
+        isDodgeTime = true;
+        yield return new WaitForSeconds(dodgeTime);
+        isDodgeTime = false;
     }
 
     public void OnHeal(int healAmount)

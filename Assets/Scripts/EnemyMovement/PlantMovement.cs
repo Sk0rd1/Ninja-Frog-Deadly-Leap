@@ -1,16 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
-public class TrunkMovement : MonoBehaviour
+public class PlantMovement : MonoBehaviour
 {
     [SerializeField]
     private Animator animator;
 
     private bool isMoveRight = false;
-    private float moveSpeed = 0.4f;
-    private float bulletSpeed = 400f;
+    private float bulletSpeed = 550f;
 
     private bool isAttack = false;
 
@@ -30,34 +28,35 @@ public class TrunkMovement : MonoBehaviour
 
     void Update()
     {
-        if (!isAttack)
-        {
-            if (isMoveRight)
-            {
-                rb.velocity = new Vector2(1f, 0) * moveSpeed;
-            }
-            else
-            {
-                rb.velocity = new Vector2(-1f, 0) * moveSpeed;
-            }
-        }
-
         Vector3 pos = playerPosition.Get();
 
-        if(pos.y - transform.position.y > 0.2f && pos.y - transform.position.y < 0.8f)
+        if (pos.y - transform.position.y > 0.4f && pos.y - transform.position.y < 0.8f)
         {
             Attack(pos);
         }
+
+        if (pos.x > transform.position.x)
+        {
+            if (!isMoveRight)
+            {
+                isMoveRight = !isMoveRight;
+                sr.flipX = !sr.flipX;
+            }
+        }
+        else
+        {
+            if (isMoveRight)
+            {
+                isMoveRight = !isMoveRight;
+                sr.flipX = !sr.flipX;
+            }
+        }
+
+        Debug.Log(isMoveRight + " " + pos.x + " " + transform.position.x);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Wall"))
-        {
-            sr.flipX = !sr.flipX;
-            isMoveRight = !isMoveRight;
-        }
-
         if (collision.CompareTag("Player"))
         {
             HealthEventSystem.instance.TriggerDamage(1);
@@ -87,7 +86,6 @@ public class TrunkMovement : MonoBehaviour
             {
                 if (!isMoveRight)
                     StartCoroutine(AttackAnimation());
-
             }
         }
     }

@@ -5,7 +5,7 @@ using UnityEngine;
 public class CharacterMovement : MonoBehaviour
 {
     [SerializeField]
-    private float moveSpeed = 1.5f;
+    private float moveSpeed = 2f;
     [SerializeField]
     private float jumpSpeed = 250f;
     [SerializeField]
