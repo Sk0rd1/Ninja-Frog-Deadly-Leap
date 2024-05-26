@@ -8,7 +8,7 @@ public class PlantMovement : MonoBehaviour
     private Animator animator;
 
     private bool isMoveRight = false;
-    private float bulletSpeed = 550f;
+    private float bulletSpeed = 300f;
 
     private bool isAttack = false;
 
@@ -17,13 +17,18 @@ public class PlantMovement : MonoBehaviour
 
     private GameObject bulletPrefab;
     private PlayerPosition playerPosition;
+    private Material hitBlind;
+    private Material defaultMaterial;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponentInChildren<SpriteRenderer>();
-        bulletPrefab = Resources.Load<GameObject>("Enemys\\BulletTrunk");
+        bulletPrefab = Resources.Load<GameObject>("Enemys\\BulletPlant");
         playerPosition = GameObject.Find("Player").GetComponent<PlayerPosition>();
+
+        defaultMaterial = sr.material;
+        hitBlind = Resources.Load<Material>("Materials\\HitBlind");
     }
 
     void Update()
@@ -50,9 +55,7 @@ public class PlantMovement : MonoBehaviour
                 isMoveRight = !isMoveRight;
                 sr.flipX = !sr.flipX;
             }
-        }
-
-        Debug.Log(isMoveRight + " " + pos.x + " " + transform.position.x);
+        }   
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -66,11 +69,9 @@ public class PlantMovement : MonoBehaviour
 
     private IEnumerator HitAnimation()
     {
-        animator.SetBool("isHit", true);
-        animator.SetBool("isAttack", false);
-        StopCoroutine(AttackAnimation());
-        yield return new WaitForSeconds(0.09f);
-        animator.SetBool("isHit", false);
+        sr.material = hitBlind;
+        yield return new WaitForSeconds(0.2f);
+        sr.material = defaultMaterial;
     }
 
     public void Attack(Vector3 playerPosition)
@@ -95,11 +96,11 @@ public class PlantMovement : MonoBehaviour
         isAttack = true;
         animator.SetBool("isAttack", true);
 
-        yield return new WaitForSeconds(1.24f);
+        yield return new WaitForSeconds(0.62f);
 
         GameObject go = Instantiate<GameObject>(bulletPrefab);
 
-        go.transform.position = transform.position + new Vector3(0, -0.085f, 0.01f);
+        go.transform.position = transform.position + new Vector3(0, 0.112f, 0.01f);
 
         Vector2 direction;
         if (isMoveRight)
@@ -109,7 +110,7 @@ public class PlantMovement : MonoBehaviour
 
         go.GetComponent<Bullet>().SetValues(direction, bulletSpeed);
 
-        yield return new WaitForSeconds(0.76f);
+        yield return new WaitForSeconds(0.38f);
 
         isAttack = false;
         animator.SetBool("isAttack", false);

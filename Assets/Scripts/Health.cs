@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Health : MonoBehaviour
 {
@@ -12,13 +13,21 @@ public class Health : MonoBehaviour
     private float dodgeTime = 0.3f;
 
     [SerializeField]
-    private SpriteRenderer[] hearts = new SpriteRenderer[5];
+    private Image[] hearts = new Image[5];
+    [SerializeField]
+    private SpriteRenderer srPlayer;
+
+    private Material hitBlind;
+    private Material defaultMaterial;
 
     void Start()
     {
         sprites[0] = Resources.Load<Sprite>("Hearts/HealthUI_0");
         sprites[1] = Resources.Load<Sprite>("Hearts/HealthUI_1");
         sprites[2] = Resources.Load<Sprite>("Hearts/HealthUI_2");
+
+        defaultMaterial = srPlayer.material;
+        hitBlind = Resources.Load<Material>("Materials\\HitBlind");
 
         //тут повинно взяти хп з сейва
         maxHearths = 3;
@@ -50,7 +59,16 @@ public class Health : MonoBehaviour
             DrawSprites();
             if (health <= 0)
                 Death();
+
+            StartCoroutine(HitBlind());
         }
+    }
+
+    private IEnumerator HitBlind()
+    {
+        srPlayer.material = hitBlind;
+        yield return new WaitForSeconds(0.2f);
+        srPlayer.material = defaultMaterial;
     }
 
     private IEnumerator DodgeTime()
@@ -72,11 +90,11 @@ public class Health : MonoBehaviour
         {
             if(i < maxHearths)
             {
-                hearts[i].gameObject.SetActive(true);
+                hearts[i].GetComponent<Image>().enabled = true;
             }
             else
             {
-                hearts[i].gameObject.SetActive(false);
+                hearts[i].GetComponent<Image>().enabled = false;
             }
         }
     }

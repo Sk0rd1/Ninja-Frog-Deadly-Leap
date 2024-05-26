@@ -2,13 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SlimeMovement : MonoBehaviour
+public class GhostMovement : MonoBehaviour
 {
     [SerializeField]
     private Animator animator;
 
     private bool isMoveRight = false;
-    private float moveSpeed = 0.5f;
+    private float moveSpeed = 0.7f;
 
     private Rigidbody2D rb;
     private SpriteRenderer sr;
@@ -23,6 +23,8 @@ public class SlimeMovement : MonoBehaviour
 
         defaultMaterial = sr.material;
         hitBlind = Resources.Load<Material>("Materials\\HitBlind");
+
+        StartCoroutine(Invicible());
     }
 
     void Update()
@@ -37,6 +39,17 @@ public class SlimeMovement : MonoBehaviour
         }
     }
 
+    private IEnumerator Invicible()
+    {
+        yield return new WaitForSeconds(Random.Range(1, 3));
+
+        animator.SetBool("Invicible", true);
+
+        yield return new WaitForSeconds(Random.Range(2, 4));
+
+        animator.SetBool("Invicible", false);
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Wall"))
@@ -47,6 +60,10 @@ public class SlimeMovement : MonoBehaviour
 
         if (collision.CompareTag("Player"))
         {
+            StopAllCoroutines();
+            animator.SetBool("Invicible", false);
+            StartCoroutine(Invicible());
+
             HealthEventSystem.instance.TriggerDamage(1);
             StartCoroutine(HitAnimation());
         }

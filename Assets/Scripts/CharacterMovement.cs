@@ -93,11 +93,6 @@ public class CharacterMovement : MonoBehaviour
             Jump(1);
             jumpBufferCount = 0;
         }
-
-        /*if (Input.GetKeyUp(KeyCode.Space) && rb.velocity.y > 0)
-        {
-            Jump(0.5f);
-        }*/
     }
 
     private void Jump(float force)
@@ -123,8 +118,8 @@ public class CharacterMovement : MonoBehaviour
             stageOfJump++;
             animator.SetInteger("jumpStage", stageOfJump);
 
-            if (stageOfJump == 2)
-                StartCoroutine(SecondJump());
+            /*if (stageOfJump == 2)
+                StartCoroutine(SecondJump());*/
         }
     }
 
@@ -166,7 +161,7 @@ public class CharacterMovement : MonoBehaviour
     private IEnumerator FloorDetect()
     {
         animator.SetInteger("jumpStage", 0);
-        yield return new WaitForSeconds(0.1f);
         stageOfJump = 0;
+        yield return null;
     }
 }

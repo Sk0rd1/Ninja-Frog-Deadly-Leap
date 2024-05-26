@@ -9,7 +9,7 @@ public class Bullet : MonoBehaviour
     private float moveSpeed;
 
     private float currentDistance = 0;
-    private float maxDistance = 1500;
+    private float maxDistance = 2500;
 
     private Rigidbody2D rb;
     private SpriteRenderer sr;  

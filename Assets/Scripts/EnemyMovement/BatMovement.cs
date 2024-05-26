@@ -15,10 +15,16 @@ public class BatMovement : MonoBehaviour
     private Rigidbody2D rb;
     private SpriteRenderer sr;
 
+    private Material hitBlind;
+    private Material defaultMaterial;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponentInChildren<SpriteRenderer>();
+
+        defaultMaterial = sr.material;
+        hitBlind = Resources.Load<Material>("Materials\\HitBlind");
     }
 
     void Update()
@@ -52,8 +58,8 @@ public class BatMovement : MonoBehaviour
 
     private IEnumerator HitAnimation()
     {
-        animator.SetBool("isHit", true);
-        yield return new WaitForSeconds(0.09f);
-        animator.SetBool("isHit", false);
+        sr.material = hitBlind;
+        yield return new WaitForSeconds(0.2f);
+        sr.material = defaultMaterial;
     }
 }

@@ -20,12 +20,18 @@ public class TrunkMovement : MonoBehaviour
     private GameObject bulletPrefab;
     private PlayerPosition playerPosition;
 
+    private Material hitBlind;
+    private Material defaultMaterial;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponentInChildren<SpriteRenderer>();
         bulletPrefab = Resources.Load<GameObject>("Enemys\\BulletTrunk");
         playerPosition = GameObject.Find("Player").GetComponent<PlayerPosition>();
+
+        defaultMaterial = sr.material;
+        hitBlind = Resources.Load<Material>("Materials\\HitBlind");
     }
 
     void Update()
@@ -67,11 +73,9 @@ public class TrunkMovement : MonoBehaviour
 
     private IEnumerator HitAnimation()
     {
-        animator.SetBool("isHit", true);
-        animator.SetBool("isAttack", false);
-        StopCoroutine(AttackAnimation());
-        yield return new WaitForSeconds(0.09f);
-        animator.SetBool("isHit", false);
+        sr.material = hitBlind;
+        yield return new WaitForSeconds(0.2f);
+        sr.material = defaultMaterial;
     }
 
     public void Attack(Vector3 playerPosition)
