@@ -40,26 +40,16 @@ public class CharacterMovement : MonoBehaviour
             CheckFall();
 
             rb.velocity = horizontalDirection + new Vector2(0, rb.velocity.y);
-
-            /*if (verticalDirection.y > 0)
-            {
-                verticalDirection.y -= verticalDirection.y * Time.deltaTime * jumpDecrement;
-            }
-            else
-            {
-                verticalDirection = Vector2.zero;
-            }*/
         }
+    }
 
+    public void PressJump()
+    {
+        if (isStartGame)
+            jumpBufferCount = jumpBufferLength;
 
-
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            isStartGame = true;
-            animator.SetBool("isGameStart", true);
-        }
-
-        //Debug.Log(rb.velocity.y);
+        isStartGame = true;
+        animator.SetBool("isGameStart", true);
     }
 
     private void CheckFall()
@@ -80,7 +70,7 @@ public class CharacterMovement : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.Space))
         {
-            jumpBufferCount = jumpBufferLength;
+            //jumpBufferCount = jumpBufferLength;
         }
         else
         {

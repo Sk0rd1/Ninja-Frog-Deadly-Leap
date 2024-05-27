@@ -8,7 +8,7 @@ public class PlantMovement : MonoBehaviour
     private Animator animator;
 
     private bool isMoveRight = false;
-    private float bulletSpeed = 300f;
+    private float bulletSpeed = 200f;
 
     private bool isAttack = false;
 
@@ -35,8 +35,9 @@ public class PlantMovement : MonoBehaviour
     {
         Vector3 pos = playerPosition.Get();
 
-        if (pos.y - transform.position.y > 0.4f && pos.y - transform.position.y < 0.8f)
+        if (pos.y - transform.position.y > -0.2f && pos.y - transform.position.y < 0.8f)
         {
+            Debug.Log("Attack");
             Attack(pos);
         }
 
@@ -100,7 +101,7 @@ public class PlantMovement : MonoBehaviour
 
         GameObject go = Instantiate<GameObject>(bulletPrefab);
 
-        go.transform.position = transform.position + new Vector3(0, 0.112f, 0.01f);
+        go.transform.position = transform.position + new Vector3(0, 0.03f, 0.01f);
 
         Vector2 direction;
         if (isMoveRight)

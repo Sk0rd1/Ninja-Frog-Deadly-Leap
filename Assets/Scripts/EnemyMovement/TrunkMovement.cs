@@ -50,7 +50,7 @@ public class TrunkMovement : MonoBehaviour
 
         Vector3 pos = playerPosition.Get();
 
-        if(pos.y - transform.position.y > 0.2f && pos.y - transform.position.y < 0.8f)
+        if(pos.y - transform.position.y > -0.2f && pos.y - transform.position.y < 0.8f)
         {
             Attack(pos);
         }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -7,6 +8,8 @@ public class LevelGenerator : MonoBehaviour
 {
     [SerializeField]
     private GameObject checkpointFlag;
+    [SerializeField]
+    private TextMeshPro startText;
 
     private GameObject[] enemys = new GameObject[8];
     private GameObject[] floors = new GameObject[7];
@@ -55,6 +58,8 @@ public class LevelGenerator : MonoBehaviour
         {
             checkpointFlag.transform.position = new Vector3(Save.GetXPos(), 1.5f * hightScore + 0.64f, -0.5f);
         }
+
+        startText.text = Save.GetHightScore().ToString();
     }
 
     public int GetScore()
@@ -77,7 +82,8 @@ public class LevelGenerator : MonoBehaviour
         }
 
         int ran = Random.Range(0, 8);
-        enemyList.Add(Instantiate(enemys[Random.Range(0, 8)]));
+        //ran = 4;
+        enemyList.Add(Instantiate(enemys[ran]));
         enemyList[enemyList.Count - 1].transform.position = new Vector3(Random.Range(-1.75f, 1.75f), 1.5f * countFloors + 0.4f, 0);
 
         if (floorList.Count > numOfFloors + 3)
