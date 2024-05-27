@@ -116,6 +116,6 @@ public class Health : MonoBehaviour
 
     private void Death()
     {
-        Debug.Log("Death");
+        Save.Death();
     }
 }

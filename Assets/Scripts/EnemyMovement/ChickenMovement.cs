@@ -53,13 +53,10 @@ public class ChickenMovement : MonoBehaviour
     {
         yield return new WaitForSeconds(Random.Range(1, 4));
 
-        Debug.Log("isIdle " + isIdle);
-
         if(isIdle)
         {
             isIdle = false;
             animator.SetBool("isRun", true);
-            Debug.Log(1);
         }
         else
         {
@@ -67,13 +64,11 @@ public class ChickenMovement : MonoBehaviour
             {
                 isIdle = true;
                 animator.SetBool("isRun", false);
-                Debug.Log(2);
             }
             else
             {
                 isMoveRight = !isMoveRight;
                 sr.flipX = !sr.flipX;
-                Debug.Log(3);
             }
         }
 
