@@ -10,6 +10,8 @@ public class LevelGenerator : MonoBehaviour
     private GameObject checkpointFlag;
     [SerializeField]
     private TextMeshPro startText;
+    [SerializeField]
+    private TextMeshProUGUI scoreText;
 
     private GameObject[] enemys = new GameObject[8];
     private GameObject[] floors = new GameObject[7];
@@ -91,5 +93,7 @@ public class LevelGenerator : MonoBehaviour
             Destroy(enemyList[0]);
             enemyList.RemoveAt(0);
         }
+
+        scoreText.text = GetScore().ToString();
     }
 }
