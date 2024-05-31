@@ -37,7 +37,6 @@ public class PlantMovement : MonoBehaviour
 
         if (pos.y - transform.position.y > -0.2f && pos.y - transform.position.y < 0.8f)
         {
-            Debug.Log("Attack");
             Attack(pos);
         }
 

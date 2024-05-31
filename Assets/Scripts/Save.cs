@@ -75,4 +75,32 @@ public static class Save
         }
         catch { return 0; }
     }
+
+    public static void SetLvlRegeneration(int value)
+    {
+        PlayerPrefs.SetInt("LvlRegeneration", value);
+    }
+
+    public static int GetLvlRegeneration()
+    {
+        try
+        {
+            return PlayerPrefs.GetInt("LvlRegeneration");
+        }
+        catch { return 0; }
+    }
+
+    public static void SetLvlCoin(int value)
+    {
+        PlayerPrefs.SetInt("LvlCoin", value);
+    }
+
+    public static int GetLvlCoin()
+    {
+        try
+        {
+            return PlayerPrefs.GetInt("LvlCoin");
+        }
+        catch { return 0; }
+    }
 }
