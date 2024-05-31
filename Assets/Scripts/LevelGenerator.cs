@@ -2,7 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
+using UnityEditorInternal;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class LevelGenerator : MonoBehaviour
 {
@@ -24,6 +26,9 @@ public class LevelGenerator : MonoBehaviour
     private List<GameObject> floorList = new List<GameObject>();
     private List<GameObject> enemyList = new List<GameObject>();
 
+    private GameObject coinPref;
+    private List<GameObject> coinList = new List<GameObject>();
+
     private void Awake()
     {
         for(int i = 0; i < enemys.Length; i++)
@@ -35,6 +40,25 @@ public class LevelGenerator : MonoBehaviour
         {
             floors[i] = Resources.Load<GameObject>("Floors\\Floor" + (i + 1).ToString());
         }
+
+        coinPref = Resources.Load<GameObject>("Objects\\Coin");
+
+        GenerateLevel();
+    }
+
+    public void GenerateLevel()
+    {
+        foreach(GameObject floor in floorList)
+            Destroy(floor);
+        foreach(GameObject enemy in enemyList)
+            Destroy(enemy);
+        foreach(GameObject coin in coinList)
+            Destroy(coin);
+
+        floorList.Clear();
+        enemyList.Clear();
+        coinList.Clear();
+
         floorList.Add(Instantiate(floors[0]));
         floorList[0].transform.position = new Vector3(0, -4.5f, 0);
         floorList.Add(Instantiate(floors[0]));
@@ -45,6 +69,8 @@ public class LevelGenerator : MonoBehaviour
         floorList.Add(Instantiate(floors[0]));
         floorList[3].transform.position = new Vector3(0, 0, 0);
         floorList[3].transform.Find("Box").gameObject.SetActive(true);
+
+        countFloors = 0;
 
         for (int i = 0; i < 10; i++)
         {
@@ -71,6 +97,7 @@ public class LevelGenerator : MonoBehaviour
 
     public void GenerateFloor()
     {
+        Debug.Log("GenerateFloor");
         countFloors++;
         int floorType = (countFloors % 34) / 5;
 
@@ -92,6 +119,14 @@ public class LevelGenerator : MonoBehaviour
         {
             Destroy(enemyList[0]);
             enemyList.RemoveAt(0);
+        }
+
+        int coinRan = Random.Range(0, 4);
+        
+        if(coinRan == 1)
+        {
+            coinList.Add(Instantiate(coinPref));
+            coinList[coinList.Count - 1].transform.position = new Vector3(Random.Range(-1.75f, 1.75f), 1.5f * countFloors + Random.Range(0.4f, 1.2f), 0);
         }
 
         scoreText.text = GetScore().ToString();

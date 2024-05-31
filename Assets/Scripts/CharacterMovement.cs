@@ -154,4 +154,16 @@ public class CharacterMovement : MonoBehaviour
         stageOfJump = 0;
         yield return null;
     }
+    
+    public void StopPlayer()
+    {
+        isStartGame = false;
+        animator.SetBool("isGameStart", false);
+
+        sr.flipX = false;
+        isMoveRight = true;
+
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = 0;
+    }
 }

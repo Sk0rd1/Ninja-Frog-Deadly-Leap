@@ -46,6 +46,9 @@ public class UpgradeEngine : MonoBehaviour
     [SerializeField]
     private Button buttonCoin;
 
+    [SerializeField]
+    private TextMeshProUGUI textCoinWin;
+
     private Sprite buttonFalseImage;
 
     private void Start()
@@ -59,8 +62,18 @@ public class UpgradeEngine : MonoBehaviour
         Initialize();
     }
 
-    public void Initialize()
+    public void Initialize(int coinWin = 0)
     {
+        if(coinWin != 0)
+        {
+            textCoinWin.enabled = true;
+            textCoinWin.text = "+" + coinWin.ToString();
+        }
+        else
+        {
+            textCoinWin.enabled = false;
+        }
+
         int speed = Save.GetLvlSpeed();
         int hearts = Save.GetLvlHearts();
         int regeneration = Save.GetLvlRegeneration();

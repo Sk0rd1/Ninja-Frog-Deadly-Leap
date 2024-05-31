@@ -9,6 +9,7 @@ public class HealthEventSystem : MonoBehaviour
 
     public event Action<int> OnDamage;
     public event Action<int> OnHeal;
+    public event Action<int> OnCoin;
 
     private void Awake()
     {
@@ -23,5 +24,10 @@ public class HealthEventSystem : MonoBehaviour
     public void TriggerHeal(int healAmount)
     {
         OnHeal?.Invoke(healAmount);
+    }
+
+    public void TriggerCoin(int coinAmount)
+    {
+        OnCoin?.Invoke(coinAmount);
     }
 }

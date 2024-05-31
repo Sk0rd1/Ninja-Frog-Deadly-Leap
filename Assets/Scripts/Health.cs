@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class Health : MonoBehaviour
 {
     private int health;
+    private int coin;
     private int maxHearths;
     private Sprite[] sprites = new Sprite[3];
 
@@ -35,6 +36,7 @@ public class Health : MonoBehaviour
 
         HealthEventSystem.instance.OnDamage += HandleDamage;
         HealthEventSystem.instance.OnHeal += HandleHeal;
+        HealthEventSystem.instance.OnCoin += HandleCoin;
 
         EnableHearts();
         DrawSprites();
@@ -50,6 +52,11 @@ public class Health : MonoBehaviour
         OnHeal(healAmount);
     }
 
+    private void HandleCoin(int coinAmount)
+    {
+        OnCoin(coinAmount);
+    }
+
     public void OnDamage(int damageAmount)
     {
         if (!isDodgeTime)
@@ -60,15 +67,19 @@ public class Health : MonoBehaviour
             if (health <= 0)
                 Death();
 
-            StartCoroutine(HitBlind());
+            try
+            {
+                StartCoroutine(HitBlind());
+            }
+            catch { }
         }
     }
 
     private IEnumerator HitBlind()
     {
-        srPlayer.material = hitBlind;
-        yield return new WaitForSeconds(0.2f);
-        srPlayer.material = defaultMaterial;
+            srPlayer.material = hitBlind;
+            yield return new WaitForSeconds(0.2f);
+            srPlayer.material = defaultMaterial;
     }
 
     private IEnumerator DodgeTime()
@@ -81,7 +92,11 @@ public class Health : MonoBehaviour
     public void OnHeal(int healAmount)
     {
         health += healAmount;
-        Debug.Log(health);
+    }
+
+    public void OnCoin(int coinAmount)
+    {
+        coin += coinAmount;
     }
 
     private void EnableHearts()
@@ -116,7 +131,6 @@ public class Health : MonoBehaviour
 
     private void Death()
     {
-        Save.Death();
-
+        GameObject.Find("HUD").GetComponent<HUDEngine>().EndGame(coin);
     }
 }
