@@ -13,6 +13,8 @@ public class HUDEngine : MonoBehaviour
     {
         Save.Death();
 
+        GetComponent<AudioSource>().Play();
+
         upgrade.SetActive(true);
         Save.SetCoin(Save.GetCoin() + coin);
         upgrade.GetComponent<UpgradeEngine>().Initialize(coin);
@@ -25,5 +27,4 @@ public class HUDEngine : MonoBehaviour
 
         GameObject.Find("Engine").GetComponent<LevelGenerator>().GenerateLevel();
     }
-
 }

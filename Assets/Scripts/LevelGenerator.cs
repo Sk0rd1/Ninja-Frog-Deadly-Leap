@@ -28,6 +28,11 @@ public class LevelGenerator : MonoBehaviour
 
     private GameObject coinPref;
     private List<GameObject> coinList = new List<GameObject>();
+    private int coinLvl = 0;
+
+    private GameObject heartPref;
+    private List<GameObject> heartList = new List<GameObject>();
+    private int heartLvl = 0;
 
     private void Awake()
     {
@@ -42,6 +47,7 @@ public class LevelGenerator : MonoBehaviour
         }
 
         coinPref = Resources.Load<GameObject>("Objects\\Coin");
+        heartPref = Resources.Load<GameObject>("Objects\\Heart");
 
         GenerateLevel();
     }
@@ -54,10 +60,13 @@ public class LevelGenerator : MonoBehaviour
             Destroy(enemy);
         foreach(GameObject coin in coinList)
             Destroy(coin);
+        foreach(GameObject heart in heartList)
+            Destroy(heart);
 
         floorList.Clear();
         enemyList.Clear();
         coinList.Clear();
+        heartList.Clear();
 
         floorList.Add(Instantiate(floors[0]));
         floorList[0].transform.position = new Vector3(0, -4.5f, 0);
@@ -72,21 +81,22 @@ public class LevelGenerator : MonoBehaviour
 
         countFloors = 0;
 
+        coinLvl = Save.GetLvlCoin();
+        heartLvl = Save.GetLvlRegeneration();
+
         for (int i = 0; i < 10; i++)
         {
             GenerateFloor();
         }
-    }
 
-    private void Start()
-    {
         int hightScore = Save.GetHightScore();
 
-        if(hightScore != 0)
+        if (hightScore != 0)
         {
             checkpointFlag.transform.position = new Vector3(Save.GetXPos(), 1.5f * hightScore + 0.64f, -0.5f);
         }
 
+        scoreText.text = "0";
         startText.text = Save.GetHightScore().ToString();
     }
 
@@ -97,7 +107,6 @@ public class LevelGenerator : MonoBehaviour
 
     public void GenerateFloor()
     {
-        Debug.Log("GenerateFloor");
         countFloors++;
         int floorType = (countFloors % 34) / 5;
 
@@ -121,12 +130,20 @@ public class LevelGenerator : MonoBehaviour
             enemyList.RemoveAt(0);
         }
 
-        int coinRan = Random.Range(0, 4);
+        int coinRan = Random.Range(0, 100 - coinLvl * 10);
         
-        if(coinRan == 1)
+        if(coinRan < 30)
         {
             coinList.Add(Instantiate(coinPref));
             coinList[coinList.Count - 1].transform.position = new Vector3(Random.Range(-1.75f, 1.75f), 1.5f * countFloors + Random.Range(0.4f, 1.2f), 0);
+        }
+
+        int heartRan = Random.Range(0, 100 - heartLvl * 10);
+
+        if (heartRan < 30)
+        {
+            heartList.Add(Instantiate(heartPref));
+            heartList[heartList.Count - 1].transform.position = new Vector3(Random.Range(-1.75f, 1.75f), 1.5f * countFloors + Random.Range(0.4f, 1.2f), 0);
         }
 
         scoreText.text = GetScore().ToString();

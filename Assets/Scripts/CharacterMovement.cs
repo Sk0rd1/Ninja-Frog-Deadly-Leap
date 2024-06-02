@@ -13,6 +13,11 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField]
     private float jumpBufferLength = 0.5f;
 
+    [SerializeField]
+    private AudioSource jump1Sound;
+    [SerializeField]
+    private AudioSource jump2Sound;
+
     private bool isStartGame = false;
     private bool isMoveRight = true;
     private int stageOfJump = 0;
@@ -29,6 +34,8 @@ public class CharacterMovement : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
+
+        moveSpeed = 1.9f + Save.GetLvlSpeed() * 0.1f;
     }
 
     void Update()
@@ -89,20 +96,18 @@ public class CharacterMovement : MonoBehaviour
     {
         if (stageOfJump < 2)
         {
-            if(stageOfJump == 1)
-            {
-                rb.velocity = new Vector2(rb.velocity.x, 0);
-                //rb.angularVelocity
-            }
 
             if (stageOfJump == 0)
             {
                 rb.AddForce(new Vector2(0, force * jumpSpeed));
+                jump1Sound.Play();
             }
 
             if(stageOfJump == 1)
             {
+                rb.velocity = new Vector2(rb.velocity.x, 0);
                 rb.AddForce(new Vector2(0, force * secondJumpSpeed));
+                jump2Sound.Play();
             }
 
             stageOfJump++;
@@ -165,5 +170,7 @@ public class CharacterMovement : MonoBehaviour
 
         rb.velocity = Vector3.zero;
         rb.angularVelocity = 0;
+
+        moveSpeed = 1.6f + Save.GetLvlSpeed() * 0.15f;
     }
 }

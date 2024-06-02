@@ -7,7 +7,7 @@ public class Health : MonoBehaviour
 {
     private int health;
     private int coin;
-    private int maxHearths;
+    private int maxHearts;
     private Sprite[] sprites = new Sprite[3];
 
     private bool isDodgeTime = false;
@@ -17,6 +17,12 @@ public class Health : MonoBehaviour
     private Image[] hearts = new Image[5];
     [SerializeField]
     private SpriteRenderer srPlayer;
+    [SerializeField]
+    private AudioSource coinSound;
+    [SerializeField]
+    private AudioSource heartSound;
+    [SerializeField]
+    private AudioSource damageSound;
 
     private Material hitBlind;
     private Material defaultMaterial;
@@ -30,14 +36,27 @@ public class Health : MonoBehaviour
         defaultMaterial = srPlayer.material;
         hitBlind = Resources.Load<Material>("Materials\\HitBlind");
 
-        //тут повинно взяти хп з сейва
-        maxHearths = 3;
-        health = 2 * maxHearths;
+        SetHealth();
 
         HealthEventSystem.instance.OnDamage += HandleDamage;
         HealthEventSystem.instance.OnHeal += HandleHeal;
         HealthEventSystem.instance.OnCoin += HandleCoin;
 
+        EnableHearts();
+        DrawSprites();
+    }
+
+    public void SetHealth()
+    {
+        maxHearts = 2 + Save.GetLvlHearts();
+        health = 2 * maxHearts;
+        coin = 0;
+    }
+
+    private void OnEnable()
+    {
+        isDodgeTime = false;
+        SetHealth();
         EnableHearts();
         DrawSprites();
     }
@@ -63,23 +82,25 @@ public class Health : MonoBehaviour
         {
             StartCoroutine(DodgeTime());
             health -= damageAmount;
+
+            damageSound.Play();
+
             DrawSprites();
             if (health <= 0)
                 Death();
 
-            try
-            {
+            if (health > 0)
                 StartCoroutine(HitBlind());
-            }
-            catch { }
+
         }
     }
 
     private IEnumerator HitBlind()
     {
-            srPlayer.material = hitBlind;
-            yield return new WaitForSeconds(0.2f);
-            srPlayer.material = defaultMaterial;
+
+        srPlayer.material = hitBlind;
+        yield return new WaitForSeconds(0.2f);
+        srPlayer.material = defaultMaterial;
     }
 
     private IEnumerator DodgeTime()
@@ -91,19 +112,25 @@ public class Health : MonoBehaviour
 
     public void OnHeal(int healAmount)
     {
-        health += healAmount;
+        if (health < maxHearts)
+        {
+            health += healAmount;
+            heartSound.Play();
+            DrawSprites();
+        }
     }
 
     public void OnCoin(int coinAmount)
     {
         coin += coinAmount;
+        coinSound.Play();
     }
 
     private void EnableHearts()
     {
         for(int i = 0; i < 5; i++)
         {
-            if(i < maxHearths)
+            if(i < maxHearts)
             {
                 hearts[i].GetComponent<Image>().enabled = true;
             }
@@ -131,6 +158,7 @@ public class Health : MonoBehaviour
 
     private void Death()
     {
+        StopCoroutine(HitBlind());
         GameObject.Find("HUD").GetComponent<HUDEngine>().EndGame(coin);
     }
 }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CoinTrigger : MonoBehaviour
+public class HeartTrigger : MonoBehaviour
 {
     private bool isActivate = false;
 
@@ -28,7 +28,7 @@ public class CoinTrigger : MonoBehaviour
         float coef = 1;
         float speed = 0.6f;
 
-        while(true)
+        while (true)
         {
             transform.position += new Vector3(0, coef * speed * Time.deltaTime, 0);
 
@@ -44,13 +44,13 @@ public class CoinTrigger : MonoBehaviour
 
     private IEnumerator Scale()
     {
-        HealthEventSystem.instance.TriggerCoin(1);
+        HealthEventSystem.instance.TriggerHeal(1);
 
-        while(true)
+        while (true)
         {
-            if(transform.localScale.x >= 0.1f)
+            if (transform.localScale.x >= 0.1f)
             {
-                transform.localScale = new Vector3(transform.localScale.x - Time.deltaTime, transform.localScale.y - Time.deltaTime, transform.localScale.z);
+                transform.localScale = new Vector3(transform.localScale.x - Time.deltaTime * 4, transform.localScale.y - Time.deltaTime * 4, transform.localScale.z);
             }
             else
             {

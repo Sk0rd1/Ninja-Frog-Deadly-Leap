@@ -55,10 +55,6 @@ public class UpgradeEngine : MonoBehaviour
     {
         buttonFalseImage = Resources.Load<Sprite>("UI\\ButtonFalse");
 
-        Save.SetCoin(200);
-        Save.SetLvlSpeed(0);
-        Save.SetLvlHearts(0);
-
         Initialize();
     }
 
@@ -81,10 +77,10 @@ public class UpgradeEngine : MonoBehaviour
 
         valueMoney.text = Save.GetCoin().ToString();
 
-        lvlSpeed.text = speed.ToString() + " <#32c8f8>/ 3";
+        lvlSpeed.text = speed.ToString() + " <#313e54>/ 3";
         lvlHearts.text = hearts.ToString() + " <#313e54>/ 3";
         lvlRegeneration.text = regeneration.ToString() + " <#313e54>/ 3";
-        lvlCoin.text = coin.ToString() + " <#fff300>/ 3";
+        lvlCoin.text = coin.ToString() + " <#313e54>/ 3";
 
         valueUpSpeed.text = ((speed + 1) * 15).ToString();
         valueUpHearts.text = ((hearts + 1) * 15).ToString();
